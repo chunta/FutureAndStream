@@ -60,13 +60,58 @@ void test() async {
   await for (final name in femaleNames().map((name) => name.toUpperCase())) {
     print(name);
   }
-  final controller = StreamController<String>();
-  controller.sink.add('sss');
-  controller.sink.add('Joas');
 
-  await for (final value in controller.stream.testccap2) {
-    print(value);
+  await for (final name in maleNames().testccap) {
+    print(name);
   }
+
+  print("====");
+  await for (final name in maleNames().aabb()) {
+    print(name);
+  }
+
+  await for (final name in maleNames().aabbs()) {
+    print(name);
+  }
+
+  print("====");
+
+  final allall = await maleNames().toList();
+  print(allall);
+
+  final result = await getTmpNames()
+      .asyncMap((name) => extractCharacters(name))
+      .fold('', (previous, element) {
+    final elements = element.join(' ');
+    return '$previous $elements';
+  });
+
+  print(result);
+
+}
+
+Stream<String> getTmpNames() async* {
+  yield 'REX';
+  yield 'HELLO';
+}
+
+extension AbsorbErrors<T> on Stream<T> {
+  Stream<T> aabb() => handleError((_, __) {});
+
+  Stream<T> aabbs() => transform(StreamTransformer.fromHandlers(
+        handleError: (_, __, sink) {
+          sink.close();
+        },
+      ));
+}
+
+Future<List<String>> extractCharacters(String from) async {
+  final characters = <String>[];
+  for (final character in from.split('')) {
+    await Future.delayed(Duration(microseconds: 100));
+    characters.add(character);
+  }
+  return characters;
 }
 
 extension on Stream<String> {
