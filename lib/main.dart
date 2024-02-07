@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,7 +52,43 @@ Future<Album> fetchAlbum() async {
 }
 
 void main() {
+  test();
   runApp(const MyApp());
+}
+
+void test() async {
+  await for (final name in femaleNames().map((name) => name.toUpperCase())) {
+    print(name);
+  }
+  final controller = StreamController<String>();
+  controller.sink.add('sss');
+  controller.sink.add('Joas');
+
+  await for (final value in controller.stream.testccap2) {
+    print(value);
+  }
+}
+
+extension on Stream<String> {
+  Stream<String> get testccap => transform(UpperCaseTramsformer());
+  Stream<String> get testccap2 => map((name) => name.toUpperCase());
+}
+
+class UpperCaseTramsformer extends StreamTransformerBase<String, String> {
+  @override
+  Stream<String> bind(Stream<String> stream) {
+    return stream.map((name) => name.toUpperCase());
+  }
+}
+
+Stream<String> maleNames() async* {
+  yield 'John';
+  yield 'Jordan';
+}
+
+Stream<String> femaleNames() async* {
+  yield 'Mary';
+  yield 'Jolin';
 }
 
 class MyApp extends StatelessWidget {
