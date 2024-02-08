@@ -57,6 +57,7 @@ void main() {
 }
 
 void test() async {
+  /*
   await for (final name in femaleNames().map((name) => name.toUpperCase())) {
     print(name);
   }
@@ -88,12 +89,35 @@ void test() async {
 
   print(result);
 
+  final threeTimes = getTmpNames().asyncExpand((event) => times3(event));
+  await for (final name in threeTimes) {
+    print(name);
+  }
+  */
+
+  print(2.doubleIt());
+  final controller = StreamController<String>.broadcast();
+  final sub1 = controller.stream.listen((event) {
+    print(event);
+  });
+
+  controller.sink.add("1");
+  controller.sink.add("2");
+}
+
+extension BecomeDouble on int {
+  int doubleIt() {
+    return this * 2;
+  }
 }
 
 Stream<String> getTmpNames() async* {
   yield 'REX';
   yield 'HELLO';
 }
+
+Stream<String> times3(String value) =>
+    Stream.fromIterable(Iterable.generate(3, (_) => value));
 
 extension AbsorbErrors<T> on Stream<T> {
   Stream<T> aabb() => handleError((_, __) {});
